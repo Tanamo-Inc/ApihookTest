@@ -1,8 +1,5 @@
-# Sample Webhooks to be used for Api.ai
-
-## Base URL
-https://apiapiwebhooksamples.herokuapp.com
-
+ Sample Api.ai Webhooks
+ ======================
 
 
 ## Deploy this app to Heroku
