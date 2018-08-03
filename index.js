@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 
 const jokeApi = 'https://api.chucknorris.io/jokes/random';
 const wikiApi = 'https://en.wikipedia.org/w/api.php?'; 
+const bibleApi = 'https://api.scripture.api.bible/v1/bibles'; 
 
 app.get('/dummyget', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
@@ -46,6 +47,19 @@ app.post('/webhook', function (req, res) {
                 }
             });
     }
+    
+        else if (req.body.result.parameters['bible']) {
+        callBible()
+            .then((output) => {
+                let result = toApiAiResponseMessage(output.value, output.value, toTelgramObject(output.value, 'Markdown'));
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
+            })
+            .catch(errorHandler);
+    }
+    
+    
+    
     
     else {
         res.setHeader('Content-Type', 'application/json');
@@ -88,6 +102,26 @@ function callWikiPedia(searchTerm, format = "json", action = "opensearch", limit
         });
     });
 }
+
+
+
+function callBible() {
+    return new Promise((resolve, reject) => {
+        https.get(bibleApi, (res) => {
+            let body = '';
+            res.on('data', (d) => body += d);
+            res.on('end', () => {
+                let jO = JSON.parse(body);
+                resolve(jO);
+            });
+
+            res.on('error', (error) => {
+                reject(error);
+            });
+        });
+    });
+}
+
 
 function toTelgramObject(text, parse_mode) {
     return {
