@@ -48,7 +48,7 @@ app.post('/webhook', function (req, res) {
             });
     }
     
-        else if (req.body.result.parameters['bible']) {
+        else if (req.body.result.parameters['quote']) {
         callQuote()
             .then((output) => {
                 let result = toApiAiResponseMessage(output.value, output.value, toTelgramObject(output.value, 'Markdown'));
