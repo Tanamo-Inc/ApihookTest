@@ -16,7 +16,7 @@ app.get('/dummyget', function (req, res) {
 
 app.post('/webhook', function (req, res) {
 
-    if (req.body.result.parameters['Bored']) {
+    if (req.body.result.parameters['joke']) {
         callJokes()
             .then((output) => {
                 let result = toApiAiResponseMessage(output.value, output.value, toTelgramObject(output.value, 'Markdown'));
@@ -26,14 +26,14 @@ app.post('/webhook', function (req, res) {
             .catch(errorHandler);
     }
     
-    else if (req.body.result.parameters['wikisearchterm']) {
-        var searchTerm = req.body.result.parameters['wikisearchterm'];
+    else if (req.body.result.parameters['search']) {
+        var searchTerm = req.body.result.parameters['search'];
        callWikiPedia(searchTerm)
             .then((output) => {
                 let displayText = `Nothing Found for: ${searchTerm}`;
                 let result;
                 if (output && output[0]) {
-                    displayText = `Here is what I found in Wikipedia about ${output[1][0]}: ${output[2][0]}`;
+                    displayText = `Here is what I found in Wikipedia about ${output[1][0]}: ${output[2][0]}: ${output[3][0]}`;
                     let telegramText = htmlEntities(`Here is what I found in Wikipedia about *${output[1][0]}*: ${output[2][0]} \n\n Read more at [WikiPedia](${output[3][0]})`);
                     result = toApiAiResponseMessage(displayText, displayText, toTelgramObject(telegramText, 'Markdown'));
                 }
@@ -72,7 +72,7 @@ function callJokes() {
     });
 }
 
-function callWikiPedia(searchTerm, format = "json", action = "opensearch", limit = 2, profile = "fuzzy") {
+function callWikiPedia(searchTerm, format = "json", action = "opensearch", limit = 3, profile = "fuzzy") {
     return new Promise((resolve, reject) => {
         let url = `${wikiApi}&format=${format}&action=${action}&limit=${limit}&profile=${profile}&search=${searchTerm}`;
         https.get(url, (res) => {
