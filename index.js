@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 
 const jokeApi = 'https://api.chucknorris.io/jokes/random';
 const wikiApi = 'https://en.wikipedia.org/w/api.php?'; 
-const bibleApi = 'https://api.scripture.api.bible/v1/bibles'; 
+const quoteApi = ''; 
 
 app.get('/dummyget', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
@@ -49,7 +49,7 @@ app.post('/webhook', function (req, res) {
     }
     
         else if (req.body.result.parameters['bible']) {
-        callBible()
+        callQuote()
             .then((output) => {
                 let result = toApiAiResponseMessage(output.value, output.value, toTelgramObject(output.value, 'Markdown'));
                 res.setHeader('Content-Type', 'application/json');
@@ -105,9 +105,9 @@ function callWikiPedia(searchTerm, format = "json", action = "opensearch", limit
 
 
 
-function callBible() {
+function callQuote() {
     return new Promise((resolve, reject) => {
-        https.get(bibleApi, (res) => {
+        https.get(quoteApi, (res) => {
             let body = '';
             res.on('data', (d) => body += d);
             res.on('end', () => {
