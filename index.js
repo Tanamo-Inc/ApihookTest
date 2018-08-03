@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 
 const jokeApi = 'https://api.chucknorris.io/jokes/random';
 const wikiApi = 'https://en.wikipedia.org/w/api.php?'; 
-const quoteApi = ''; 
+const quoteApi = 'https://en.wikiquote.org/w/api.php'; 
 
 app.get('/dummyget', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
